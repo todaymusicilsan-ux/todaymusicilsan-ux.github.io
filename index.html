@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>merchingirl-n8n · 멋찐걸 SNS 자동발행</title>
+<meta name="description" content="merchingirl-n8n은 팟캐스트 '멋찐걸'의 짧은 영상과 이미지를 Google Drive·Sheets·YouTube로 예약 발행하는 개인용 자동화 도구입니다.">
+<style>
+  :root{
+    --ink:#141114; --muted:#6b6570; --line:#e8e3ea; --bg:#fffdfd;
+    --accent:#e0457b; --accent-soft:#fdebf1; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:860px; margin:0 auto; padding:0 24px}
+  header{padding:56px 0 40px; border-bottom:1px solid var(--line)}
+  .badge{
+    display:inline-block; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    background:var(--accent-soft); color:var(--accent); padding:6px 12px; border-radius:999px; font-weight:700;
+  }
+  h1{font-size:34px; line-height:1.25; margin:18px 0 10px; letter-spacing:-.02em}
+  h1 small{display:block; font-size:17px; font-weight:500; color:var(--muted); margin-top:10px; letter-spacing:0}
+  section{padding:44px 0; border-bottom:1px solid var(--line)}
+  h2{font-size:22px; margin:0 0 14px; letter-spacing:-.01em}
+  h3{font-size:16px; margin:26px 0 8px}
+  p{margin:0 0 14px}
+  ul{margin:0 0 16px; padding-left:20px}
+  li{margin:6px 0}
+  .lead{font-size:17px; color:#3a333c}
+  .muted{color:var(--muted); font-size:14px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px}
+  .grid{display:grid; gap:14px; grid-template-columns:1fr}
+  @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+  table{width:100%; border-collapse:collapse; font-size:15px; margin:8px 0 6px}
+  th,td{text-align:left; padding:12px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700}
+  code{background:#f5f1f6; padding:2px 6px; border-radius:6px; font-size:13px; word-break:break-all}
+  .flow{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 18px}
+  .step{background:var(--accent-soft); color:#8a2a51; border-radius:10px; padding:10px 14px; font-size:14px; font-weight:600}
+  .arrow{color:#c9bfcd; align-self:center}
+  footer{padding:36px 0 60px; color:var(--muted); font-size:14px}
+  .en{border-top:1px dashed var(--line); margin-top:10px; padding-top:18px}
+  .en h2{font-size:18px}
+  .en p, .en li{font-size:14.5px; color:#3a333c}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">Personal automation · 개인용 자동화 도구</span>
+    <h1>merchingirl-n8n
+      <small>팟캐스트 &lsquo;멋찐걸&rsquo;의 짧은 영상·이미지를 Google Drive → Google Sheets → YouTube로 예약 발행하는 1인용 도구입니다.</small>
+    </h1>
+    <p class="muted">운영: 유림 왕 (멋찐걸 · Merchingirl) · 문의: <a href="mailto:merchingirlspod@gmail.com">merchingirlspod@gmail.com</a></p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>이 앱은 무엇인가요?</h2>
+    <p class="lead">
+      <strong>merchingirl-n8n</strong>은 제가 운영하는 팟캐스트 &lsquo;멋찐걸&rsquo;의 콘텐츠를 제가 정한 시간에
+      제 사회관계망(YouTube Shorts · Instagram Reels · Threads)에 올리기 위해 직접 만든 <strong>개인용 자동화 도구</strong>입니다.
+    </p>
+    <ul>
+      <li>사용자는 <strong>운영자 본인 1명</strong>입니다. 회원가입, 결제, 일반 공개 사용은 없습니다.</li>
+      <li>다른 사람의 Google 계정 데이터를 수집하거나 열람하지 않습니다. 접근하는 데이터는 <strong>운영자 본인의 Google Drive·Sheets·YouTube</strong>뿐입니다.</li>
+      <li>Google API로 받은 데이터를 판매·광고·제3자 제공에 사용하지 않습니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>어떻게 동작하나요?</h2>
+    <div class="flow">
+      <span class="step">① Drive 폴더에 영상·이미지 업로드</span><span class="arrow">→</span>
+      <span class="step">② 예약 시트에 시간·캡션 입력</span><span class="arrow">→</span>
+      <span class="step">③ 15분마다 예약 확인</span><span class="arrow">→</span>
+      <span class="step">④ YouTube·Reels·Threads 발행</span><span class="arrow">→</span>
+      <span class="step">⑤ 결과 기록 · 아카이브 이동</span>
+    </div>
+    <p>
+      제가 Google Drive의 &lsquo;01_업로드할_영상&rsquo; 폴더에 영상을 올리고, Google Sheets 예약표에 올릴 시간과 캡션을 적으면,
+      워크플로우(n8n)가 예약 시간이 된 항목을 찾아 해당 채널에 업로드하고, 결과를 같은 시트에 기록한 뒤 파일을 아카이브 폴더로 옮깁니다.
+    </p>
+    <p class="muted">자동화 엔진은 운영자가 직접 운영하는 자체 서버(Railway에 배포한 n8n 인스턴스)에서 실행됩니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>요청하는 Google 권한과 사용 목적</h2>
+    <table>
+      <thead><tr><th>권한(Scope)</th><th>무엇에 쓰나요</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>.../auth/drive</code></td>
+          <td>제 Drive의 &lsquo;01_업로드할_영상&rsquo; 폴더에서 발행할 영상·이미지 파일을 찾아 내려받고, 발행이 끝난 파일을 &lsquo;02_발행완료_아카이브&rsquo; 폴더로 옮기기 위해 사용합니다. 폴더 안 파일 목록을 읽어야 해서 Drive 전체 범위가 필요합니다.</td>
+        </tr>
+        <tr>
+          <td><code>.../auth/spreadsheets</code></td>
+          <td>발행 예약표(Google Sheets)에서 예약 시간·캡션·채널을 읽고, 발행 결과(성공/실패, 발행 시각)를 같은 표에 기록하기 위해 사용합니다.</td>
+        </tr>
+        <tr>
+          <td><code>.../auth/youtube.upload</code></td>
+          <td>제가 만든 짧은 영상을 <strong>제 YouTube 채널</strong>에 Shorts로 업로드하기 위해 사용합니다. 영상 제목·설명·공개 상태는 제가 예약표에 적은 값 그대로 전송됩니다.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted">위 세 가지 외의 Google 권한은 요청하지 않습니다. 다른 사용자의 계정에 접근하지 않으며, Google Workspace 관리자 권한이나 Gmail 접근도 사용하지 않습니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>데이터는 어떻게 다루나요?</h2>
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-top:0">저장 위치</h3>
+        <p>영상·이미지와 예약표는 <strong>제 Google 계정</strong>에 그대로 있고, 자동화 서버는 처리하는 동안에만 파일을 임시로 내려받습니다.
+        OAuth 접근 토큰은 제가 운영하는 자체 서버의 암호화된 자격증명 저장소에만 보관됩니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">제3자 제공</h3>
+        <p>어떤 데이터도 판매·대여·광고에 사용하지 않고 제3자에게 제공하지 않습니다. Google API에서 받은 데이터는 앱의 발행 기능 수행 목적으로만 사용합니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">보관과 삭제</h3>
+        <p>발행 기록은 예약표에 남고, 필요 없어지면 제가 직접 삭제합니다. Google 계정의 <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">보안 &gt; 타사 앱 액세스</a>에서 언제든 접근을 해제할 수 있으며, 해제하면 서버의 토큰도 더 이상 동작하지 않습니다.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">YouTube API Services</h3>
+        <p>이 앱은 YouTube API Services를 사용합니다. 앱을 사용함으로써 <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube 서비스 약관</a>과
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 개인정보처리방침</a>에 동의하게 됩니다.</p>
+      </div>
+    </div>
+    <p style="margin-top:22px">자세한 내용은 <a href="privacy.html">개인정보처리방침</a>과 <a href="terms.html">이용약관</a>에서 확인하실 수 있습니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>문의</h2>
+    <p>앱 운영자: 유림 왕 (멋찐걸 / Merchingirl)<br>
+    이메일: <a href="mailto:merchingirlspod@gmail.com">merchingirlspod@gmail.com</a></p>
+    <p class="muted">개인정보 관련 문의, 데이터 삭제 요청도 위 이메일로 받습니다.</p>
+  </div>
+</section>
+
+<section class="en">
+  <div class="wrap">
+    <h2>About this app (English)</h2>
+    <p>
+      <strong>merchingirl-n8n</strong> is a private, single-user automation built by the operator of the podcast
+      &ldquo;Merchingirl&rdquo; (멋찐걸). It publishes the operator&rsquo;s own short-form videos and images to the
+      operator&rsquo;s own YouTube channel (Shorts), Instagram and Threads on a schedule.
+    </p>
+    <p>It is not a public service: there is no sign-up, no payment, and no other user&rsquo;s Google data is accessed.</p>
+    <h3>How it works</h3>
+    <p>
+      The operator uploads a video to a Google Drive folder and adds a row (time, caption, target channels) to a Google Sheet.
+      Every 15 minutes the workflow checks for due rows, uploads the matching file, writes the result back to the sheet,
+      and moves the file to an archive folder.
+    </p>
+    <h3>Google scopes requested and why</h3>
+    <ul>
+      <li><code>https://www.googleapis.com/auth/drive</code> — list and download the operator&rsquo;s video/image files from the upload folder, and move published files to the archive folder.</li>
+      <li><code>https://www.googleapis.com/auth/spreadsheets</code> — read the publishing schedule and write publishing results back to the operator&rsquo;s spreadsheet.</li>
+      <li><code>https://www.googleapis.com/auth/youtube.upload</code> — upload the operator&rsquo;s own videos to the operator&rsquo;s own YouTube channel as Shorts.</li>
+    </ul>
+    <h3>Data handling</h3>
+    <p>
+      No Google user data is sold, shared, or used for advertising. Files remain in the operator&rsquo;s Google account;
+      OAuth tokens are stored only in the operator&rsquo;s self-hosted automation server. Access can be revoked at any time at
+      <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account permissions</a>.
+      This app uses YouTube API Services; by using it you agree to the
+      <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a> and the
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.
+    </p>
+    <p>Contact: <a href="mailto:merchingirlspod@gmail.com">merchingirlspod@gmail.com</a> · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    © 2026 Merchingirl · 멋찐걸 · merchingirl-n8n · <a href="privacy.html">개인정보처리방침</a> · <a href="terms.html">이용약관</a>
+  </div>
+</footer>
+
+</body>
+</html>
